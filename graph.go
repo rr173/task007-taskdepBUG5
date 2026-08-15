@@ -117,6 +117,9 @@ func (s *Service) Create(name string, dependsOn []string) (*Task, error) {
 		if d == name {
 			return nil, badRequest("task %q cannot depend on itself", name)
 		}
+		if strings.Contains(d, "/") {
+			return nil, badRequest("dependency name %q must not contain '/'", d)
+		}
 	}
 	s.seq++
 	t := &Task{Name: name, DependsOn: deps, CreatedAt: s.seq}
